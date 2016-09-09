@@ -1,0 +1,148 @@
+﻿@model PracticalTest.Models.ClientModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>View</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.parameters.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.parameters.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.parameters.Name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.parameters.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.parameters.Gender, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.parameters.Gender, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.parameters.SelectedCityGUID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("SelectedCityGUID", new SelectList(Model.parameters.Cities, "CityId", "CityName", Model.parameters.SelectedCityGUID.ToString()), "Selecione..", new { htmlAttributes = new { @class = "form-control", } })
+            @Html.ValidationMessageFor(model => model.parameters.SelectedCityGUID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.parameters.SelectedRegionGUID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("SelectedRegionGUID", new SelectList(Model.parameters.Regions, "RegionId", "RegionName", Model.parameters.SelectedRegionGUID.ToString()), "Selecione..", new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.parameters.SelectedRegionGUID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.parameters.LastPurchaseFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8" style="display:inline-flex">
+            @Html.EditorFor(model => model.parameters.LastPurchaseFrom, new { htmlAttributes = new { @class = "form-control", @text = Model.parameters.LastPurchaseFrom } })
+            <label class="control-label">To</label>
+            @Html.EditorFor(model => model.parameters.LastPurchaseTo, new { htmlAttributes = new { @class = "form-control", @text = Model.parameters.LastPurchaseTo } })
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.parameters.SelectedClassificationGUID, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("SelectedClassificationGUID", new SelectList(Model.parameters.Classifications, "ClassificationId", "ClassificationName", Model.parameters.SelectedClassificationGUID.ToString()), "Selecione..", new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.parameters.SelectedClassificationGUID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br />
+    if (Model.parameters.Admin)
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.parameters.SelectedSellerGUID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("SelectedSellerGUID", new SelectList(Model.parameters.Sellers, "UserId", "Name", Model.parameters.SelectedSellerGUID.ToString()), "Selecione..", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.parameters.SelectedSellerGUID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Search" class="btn btn-default" />
+            <input type="submit" value="Clear Fields" class="btn btn-default" onclick="ClearFields();" />
+        </div>
+    </div>
+    <br />
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            Classification
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Phone
+        </th>
+        <th>
+            Gender
+        </th>
+        <th>
+            City
+        </th>
+        <th>
+            Region
+        </th>
+        <th>
+            LastPurchase
+        </th>
+        @if (Model.parameters.Admin)
+        {
+            <th>
+                Seller
+            </th>
+        }
+    </tr>
+
+    @foreach (var item in Model.clients)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Classification)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Region)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastPurchase)
+            </td>
+            @if (Model.parameters.Admin)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Seller)
+                </td>
+            }
+    </tr>
+    }
+
+        </table>
